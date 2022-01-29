@@ -58,8 +58,6 @@ def usage():
     -r    --switch      Request new tor exit node
     -x    --stop        Stop Torghost
     -h    --help        print(this help and exit)
-    -u    --update      check for update
-
     """)
     sys.exit()
 
@@ -99,6 +97,8 @@ resolv = '/etc/resolv.conf'
 
 
 def start_torghost():
+    print(get_time() + ' Fetching current IP...')
+    print(get_time() + ' IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
     os.system('sudo cp /etc/resolv.conf /etc/resolv.conf.bak')
     if os.path.exists(Torrc) and TorrcCfgString in open(Torrc).read():
         print(get_time() + ' Torrc file already configured')
@@ -154,10 +154,12 @@ def start_torghost():
     os.system(iptables_rules)
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
     print(get_time() + ' Fetching current IP...')
-    print(get_time() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
+    print(get_time() + ' TOR EXIT NODE IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
 
 
 def stop_torghost():
+    print(get_time() + ' Fetching current IP...')
+    print(get_time() + ' TOR EXIT NODE IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
     print(bcolors.RED + get_time() + 'STOPPING torghost' + bcolors.ENDC)
     print(get_time() + ' Flushing iptables, resetting to default'),
     os.system('mv /etc/resolv.conf.bak /etc/resolv.conf')
@@ -179,10 +181,12 @@ def stop_torghost():
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
     print(get_time() + ' Fetching current IP...')
     time.sleep(3)
-    print(get_time() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
+    print(get_time() + ' IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
 
 
 def switch_tor():
+    print(get_time() + ' Fetching current IP...')
+    print(get_time() + ' TOR EXIT NODE IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
     print(get_time() + ' Please wait...')
     time.sleep(7)
     print(get_time() + ' Requesting new circuit...'),
@@ -191,16 +195,15 @@ def switch_tor():
         controller.signal(Signal.NEWNYM)
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
     print(get_time() + ' Fetching current IP...')
-    print(get_time() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
+    print(get_time() + ' NEW TOR EXIT NODE IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
 
 def main():
     check_root()
     if len(sys.argv) <= 1:
-        check_update()
         usage()
     try:
         (opts, args) = getopt.getopt(sys.argv[1:], 'srxhu', [
-            'start', 'stop', 'switch', 'help', 'update'])
+            'start', 'stop', 'switch', 'help'])
     except (getopt.GetoptError):
         usage()
         sys.exit(2)
@@ -213,8 +216,6 @@ def main():
             stop_torghost()
         elif o in ('-r', '--switch'):
             switch_tor()
-        elif o in ('-u', '--update'):
-            check_update()
         else:
             usage()
 
