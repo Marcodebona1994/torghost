@@ -12,13 +12,7 @@ from stem import Signal
 from stem.control import Controller
 from packaging import version
 
-VERSION = "3.1.1"
-
-IP_API = "https://api.ipify.org/?format=json"
-
-LATEST_RELEASE_API = "https://api.github.com/repos/SusmithKrishnan/torghost/releases/latest"
-
-
+VERSION = "4.0"
 class bcolors:
 
     BLUE = '\033[94m'
@@ -51,7 +45,7 @@ def logo():
        | |/ _ \| '__| |  _| '_ \ / _ \/ __| __|
        | | (_) | |  | |_| | | | | (_) \__ \ |_
        |_|\___/|_|   \____|_| |_|\___/|___/\__|
-	{V} - github.com/SusmithKrishnan/torghost
+	{V} - github.com/marcodebona/torghost
 
     """.format(V=VERSION))
     print(bcolors.ENDC)
@@ -74,12 +68,11 @@ def usage():
 def ip():
     while True:
         try:
-            jsonRes = get(IP_API).json()
-            ipTxt = jsonRes["ip"]
+            public_ip=get("https://ifconfig.me").text
         except:
             continue
         break
-    return ipTxt
+    return public_ip
 
 
 def check_root():
@@ -201,33 +194,6 @@ def switch_tor():
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
     print(t() + ' Fetching current IP...')
     print(t() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
-
-
-def check_update():
-    print(t() + ' Checking for update...')
-    jsonRes = get(LATEST_RELEASE_API).json()
-    newversion = jsonRes["tag_name"][1:]
-    print(newversion)
-    if version.parse(newversion) > version.parse(VERSION):
-        print(t() + bcolors.GREEN + ' New update available!' + bcolors.ENDC)
-        print(t() + ' Your current TorGhost version : ' + bcolors.GREEN + VERSION + bcolors.ENDC)
-        print(t() + ' Latest TorGhost version available : ' + bcolors.GREEN + newversion + bcolors.ENDC)
-        yes = {'yes', 'y', 'ye', ''}
-        no = {'no', 'n'}
-
-        choice = input(
-            bcolors.BOLD + "Would you like to download latest version and build from Git repo? [Y/n]" + bcolors.ENDC).lower()
-        if choice in yes:
-            os.system(
-                'cd /tmp && git clone  https://github.com/SusmithKrishnan/torghost')
-            os.system('cd /tmp/torghost && sudo ./build.sh')
-        elif choice in no:
-            print(t() + " Update aborted by user")
-        else:
-            print("Please respond with 'yes' or 'no'")
-    else:
-        print(t() + " Torghost is up to date!")
-
 
 def main():
     check_root()
