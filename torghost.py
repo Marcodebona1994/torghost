@@ -10,7 +10,6 @@ import time
 import signal
 from stem import Signal
 from stem.control import Controller
-from packaging import version
 
 VERSION = "4.0"
 class bcolors:
@@ -26,7 +25,7 @@ class bcolors:
     WHITE = '\033[37m'
 
 
-def t():
+def get_time():
     current_time = time.localtime()
     ctime = time.strftime('%H:%M:%S', current_time)
     return '[' + ctime + ']'
@@ -100,33 +99,32 @@ resolv = '/etc/resolv.conf'
 
 
 def start_torghost():
-    print(t() + ' Always check for updates using -u option')
     os.system('sudo cp /etc/resolv.conf /etc/resolv.conf.bak')
     if os.path.exists(Torrc) and TorrcCfgString in open(Torrc).read():
-        print(t() + ' Torrc file already configured')
+        print(get_time() + ' Torrc file already configured')
     else:
 
         with open(Torrc, 'w') as myfile:
-            print(t() + ' Writing torcc file ')
+            print(get_time() + ' Writing torcc file ')
             myfile.write(TorrcCfgString)
             print(bcolors.GREEN + '[done]' + bcolors.ENDC)
     if resolvString in open(resolv).read():
-        print(t() + ' DNS resolv.conf file already configured')
+        print(get_time() + ' DNS resolv.conf file already configured')
     else:
         with open(resolv, 'w') as myfile:
-            print(t() + ' Configuring DNS resolv.conf file.. '),
+            print(get_time() + ' Configuring DNS resolv.conf file.. '),
             myfile.write(resolvString)
             print(bcolors.GREEN + '[done]' + bcolors.ENDC)
 
-    print(t() + ' Stopping tor service '),
+    print(get_time() + ' Stopping tor service '),
     os.system('sudo systemctl stop tor')
     os.system('sudo fuser -k 9051/tcp > /dev/null 2>&1')
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
-    print(t() + ' Starting new tor daemon '),
+    print(get_time() + ' Starting new tor daemon '),
     os.system('sudo -u debian-tor tor -f /etc/tor/torghostrc > /dev/null'
               )
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
-    print(t() + ' setting up iptables rules'),
+    print(get_time() + ' setting up iptables rules'),
 
     iptables_rules = \
         """
@@ -155,13 +153,13 @@ def start_torghost():
 
     os.system(iptables_rules)
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
-    print(t() + ' Fetching current IP...')
-    print(t() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
+    print(get_time() + ' Fetching current IP...')
+    print(get_time() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
 
 
 def stop_torghost():
-    print(bcolors.RED + t() + 'STOPPING torghost' + bcolors.ENDC)
-    print(t() + ' Flushing iptables, resetting to default'),
+    print(bcolors.RED + get_time() + 'STOPPING torghost' + bcolors.ENDC)
+    print(get_time() + ' Flushing iptables, resetting to default'),
     os.system('mv /etc/resolv.conf.bak /etc/resolv.conf')
     IpFlush = \
         """
@@ -176,24 +174,24 @@ def stop_torghost():
     os.system(IpFlush)
     os.system('sudo fuser -k 9051/tcp > /dev/null 2>&1')
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
-    print(t() + ' Restarting Network manager'),
+    print(get_time() + ' Restarting Network manager'),
     os.system('service network-manager restart')
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
-    print(t() + ' Fetching current IP...')
+    print(get_time() + ' Fetching current IP...')
     time.sleep(3)
-    print(t() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
+    print(get_time() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
 
 
 def switch_tor():
-    print(t() + ' Please wait...')
+    print(get_time() + ' Please wait...')
     time.sleep(7)
-    print(t() + ' Requesting new circuit...'),
+    print(get_time() + ' Requesting new circuit...'),
     with Controller.from_port(port=9051) as controller:
         controller.authenticate()
         controller.signal(Signal.NEWNYM)
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
-    print(t() + ' Fetching current IP...')
-    print(t() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
+    print(get_time() + ' Fetching current IP...')
+    print(get_time() + ' CURRENT IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
 
 def main():
     check_root()
