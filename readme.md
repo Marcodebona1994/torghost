@@ -26,10 +26,10 @@ sudo torghost --start
 ```
 Torghost v3.0 usage:
 
-`  -s      --start        Start`
+`  -s      --start        # Start`
 
-`  -r      --switch       Request new tor exit node`
+`  -r      --switch       # Request new tor exit node`
 
-`  -x      --stop         Stop`
+`  -x      --stop         # Stop`
 
-`  -h      --help         Print this help and exit`
+`  -h      --help         # Print this help and exit`
