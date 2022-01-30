@@ -99,11 +99,13 @@ resolv = '/etc/resolv.conf'
 def start_torghost():
     print(get_time() + ' Fetching current IP...')
     print(get_time() + ' IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
+    os.system('sudo mkdir /opt/torghost')
     os.system('sudo cp /etc/resolv.conf /etc/resolv.conf.bak')
+    os.system('sudo iptables-restore < /opt/torghost/iptables_bck.fw')
+    os.system('sudo iptables-save > /opt/torghost/iptables_bck.fw')
     if os.path.exists(Torrc) and TorrcCfgString in open(Torrc).read():
         print(get_time() + ' Torrc file already configured')
     else:
-
         with open(Torrc, 'w') as myfile:
             print(get_time() + ' Writing torcc file ')
             myfile.write(TorrcCfgString)
@@ -163,17 +165,7 @@ def stop_torghost():
     print(bcolors.RED + get_time() + 'STOPPING torghost' + bcolors.ENDC)
     print(get_time() + ' Flushing iptables, resetting to default'),
     os.system('mv /etc/resolv.conf.bak /etc/resolv.conf')
-    IpFlush = \
-        """
-	iptables -P INPUT ACCEPT
-	iptables -P FORWARD ACCEPT
-	iptables -P OUTPUT ACCEPT
-	iptables -t nat -F
-	iptables -t mangle -F
-	iptables -F
-	iptables -X
-	"""
-    os.system(IpFlush)
+    os.system('sudo iptables-restore < /opt/torghost/iptables_bck.fw')
     open(Torrc , "w").close()
     os.system('sudo fuser -k 9051/tcp > /dev/null 2>&1')
     print(bcolors.GREEN + '[done]' + bcolors.ENDC)
