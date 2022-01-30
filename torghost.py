@@ -44,7 +44,7 @@ def logo():
        | |/ _ \| '__| |  _| '_ \ / _ \/ __| __|
        | | (_) | |  | |_| | | | | (_) \__ \ |_
        |_|\___/|_|   \____|_| |_|\___/|___/\__|
-	{V} - github.com/marcodebona/torghost
+	{V} - github.com/marcodebona1994/torghost
 
     """.format(V=VERSION))
     print(bcolors.ENDC)
@@ -57,7 +57,7 @@ def usage():
     -s, --start       # Start Torghost
     -r, --switch      # Request new tor exit node
     -x, --stop        # Stop Torghost
-    -h  --help        #
+    -h  --help
     """)
     sys.exit()
 
