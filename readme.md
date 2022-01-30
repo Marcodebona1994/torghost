@@ -20,6 +20,10 @@ chmod +x build.sh
 ```
 sudo python3 torghost.py --start
 ```
+or
+```
+sudo torghost --start
+```
 Torghost v3.0 usage:
 
 `  -s      --start        Start`
