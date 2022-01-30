@@ -99,9 +99,10 @@ resolv = '/etc/resolv.conf'
 def start_torghost():
     print(get_time() + ' Fetching current IP...')
     print(get_time() + ' IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
-    os.system('sudo mkdir /opt/torghost')
+    os.system('sudo mkdir -p /opt/torghost')
     os.system('sudo cp /etc/resolv.conf /etc/resolv.conf.bak')
-    os.system('sudo iptables-restore < /opt/torghost/iptables_bck.fw')
+    if os.path.exists("/opt/torghost/iptables_bck.fw"):
+        os.system('sudo iptables-restore < /opt/torghost/iptables_bck.fw')
     os.system('sudo iptables-save > /opt/torghost/iptables_bck.fw')
     if os.path.exists(Torrc) and TorrcCfgString in open(Torrc).read():
         print(get_time() + ' Torrc file already configured')
