@@ -54,10 +54,10 @@ def usage():
     logo()
     print("""
     Torghost usage:
-    -s    --start       Start Torghost
-    -r    --switch      Request new tor exit node
-    -x    --stop        Stop Torghost
-    -h    --help        print(this help and exit)
+    -s, --start       # Start Torghost
+    -r, --switch      # Request new tor exit node
+    -x, --stop        # Stop Torghost
+    -h  --help        #
     """)
     sys.exit()
 
