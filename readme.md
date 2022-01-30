@@ -12,7 +12,7 @@ git clone https://github.com/marcodebona1994/torghost.git
 ## Build
 ```
 cd torghost
-chmod +x build.sh
+chmod +x installer.sh
 ./installer.sh
 ```
 
