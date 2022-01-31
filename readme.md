@@ -33,3 +33,15 @@ Torghost v3.0 usage:
 `  -x, --stop         # Stop`
 
 `  -h, --help         # Print this help and exit`
+
+## Warning
+The script will delete and restore the current iptables rules. If you want to be 100% secure, manually save your iptables_bck
+
+Save iptables
+```
+iptables-save > path_to_back/iptables_bck.fw
+```
+Restore iptables
+```
+iptables-restore < path_to_back/iptables_bck.fw
+```
