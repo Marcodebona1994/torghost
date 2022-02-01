@@ -4,6 +4,23 @@ sudo apt-get install tor python3-pip cython3 -y
 echo "Installing dependencies "
 sudo pip3 install -r requirements.txt
 mkdir -p bin
+#Crete backup of the networkconfig files
+mkdir -p /opt/torghost/backup/
+sudo cp -p /etc/resolv.conf /opt/torghost/backup/resolv.conf
+if [ $? -eq 0 ]; then
+	echo [SUCCESS] Create resolv.conf backup
+else
+    echo [ERROR] Failed to backup resolv.conf file
+    exit 1
+fi
+sudo iptables-save | tee /opt/torghost/backup/iptables.fw
+if [ $? -eq 0 ]; then
+	echo [SUCCESS] Create iptables backup
+else
+    echo [ERROR] Failed to backup iptables configuration
+    exit 1
+fi
+
 py3_version=$(python3 -V | cut -d' ' -f2 | cut -d'.' -f1,2)
 if [ $? -eq 0 ]; then
 	echo [SUCCESS] Python ${py3_version} installed
@@ -25,7 +42,7 @@ else
     echo [ERROR] Build failed
     exit 1
 fi
-sudo cp -r bin/torghost /usr/bin/
+sudo cp -p bin/torghost /usr/bin/
 if [ $? -eq 0 ]; then
     echo [SUCCESS] Copied binary to /usr/bin
 else
