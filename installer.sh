@@ -4,7 +4,6 @@ sudo apt-get install tor python3-pip cython3 -y
 echo "Installing dependencies "
 sudo pip3 install -r requirements.txt
 mkdir -p bin
-cd bin
 py3_version=$(python3 -V | cut -d' ' -f2 | cut -d'.' -f1,2)
 if [ $? -eq 0 ]; then
 	echo [SUCCESS] Python ${py3_version} installed
@@ -12,7 +11,7 @@ else
 	echo [ERROR] Python3 version not found
 	exit 1
 fi
-cython3 torghost.py --embed -o bin/torghost.c --verbose
+cython3 torghost.py --embed -o bin/torghost.c --verbose -3
 if [ $? -eq 0 ]; then
     echo [SUCCESS] Generated C code
 else
