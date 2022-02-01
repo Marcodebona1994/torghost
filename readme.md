@@ -18,13 +18,13 @@ chmod +x installer.sh
 
 ## Run
 ```
-sudo python3 torghost.py --start
+sudo torghost --start
 ```
 or
 ```
-sudo torghost --start
+sudo python3 torghost.py --start
 ```
-Torghost v3.0 usage:
+Torghost v4.0 usage:
 
 `  -s, --start        # Start`
 
@@ -35,7 +35,7 @@ Torghost v3.0 usage:
 `  -h, --help         # Print this help and exit`
 
 ## Warning
-The script will delete and restore the current iptables rules. If you want to be 100% secure, manually save your iptables_bck
+The script will delete and restore the current iptables rules. If you want to be 100% secure, manually save your iptables
 
 Save iptables
 ```
