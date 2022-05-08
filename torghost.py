@@ -192,6 +192,20 @@ def switch_tor():
     print(get_time() + ' Fetching current IP...')
     print(get_time() + ' NEW TOR EXIT NODE IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
 
+def restore_backup():
+    print(get_time() + ' Restoring original iptables'),
+    os.system('sudo iptables-restore < /opt/torghost/backup/iptables.fw')
+    os.system('mv /opt/torghost/backup/resolv.conf /etc/resolv.conf')
+    open(Torrc , "w").close()
+    os.system('sudo fuser -k 9051/tcp > /dev/null 2>&1')
+    print(bcolors.GREEN + '[done]' + bcolors.ENDC)
+    print(get_time() + ' Restarting Network manager'),
+    os.system('service network-manager restart')
+    print(bcolors.GREEN + '[done]' + bcolors.ENDC)
+    print(get_time() + ' Fetching current IP...')
+    time.sleep(3)
+    print(get_time() + ' IP : ' + bcolors.GREEN + ip() + bcolors.ENDC)
+
 def main():
     check_root()
     if len(sys.argv) <= 1:
@@ -211,6 +225,8 @@ def main():
             stop_torghost()
         elif o in ('-r', '--switch'):
             switch_tor()
+        elif o in ('-b', '--backup-restore'):
+            restore_backup()
         else:
             usage()
 
