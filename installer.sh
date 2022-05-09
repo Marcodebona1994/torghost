@@ -1,51 +1,49 @@
-echo "Torghost installer v3.0"
-echo "Installing prerequisites "
-sudo apt-get install tor python3-pip cython3 -y
-echo "Installing dependencies "
-sudo pip3 install -r requirements.txt
-mkdir -p bin
-#Crete backup of the networkconfig files
-mkdir -p /opt/torghost/backup/
-sudo cp -p /etc/resolv.conf /opt/torghost/backup/resolv.conf
-if [ $? -eq 0 ]; then
-	echo [SUCCESS] Create resolv.conf backup
-else
-    echo [ERROR] Failed to backup resolv.conf file
-    exit 1
-fi
-sudo iptables-save | tee /opt/torghost/backup/iptables.fw
-if [ $? -eq 0 ]; then
-	echo [SUCCESS] Create iptables backup
-else
-    echo [ERROR] Failed to backup iptables configuration
-    exit 1
-fi
+#!/bin/bash
 
-py3_version=$(python3 -V | cut -d' ' -f2 | cut -d'.' -f1,2)
-if [ $? -eq 0 ]; then
-	echo [SUCCESS] Python ${py3_version} installed
-else
-	echo [ERROR] Python3 version not found
-	exit 1
-fi
-cython3 torghost.py --embed -o bin/torghost.c --verbose -3
-if [ $? -eq 0 ]; then
-    echo [SUCCESS] Generated C code
-else
-    echo [ERROR] Build failed. Unable to generate C code using cython3
-    exit 1
-fi
-gcc -Os -I /usr/include/python${py3_version} -o bin/torghost bin/torghost.c -lpython${py3_version} -lpthread -lm -lutil -ldl
-if [ $? -eq 0 ]; then
-    echo [SUCCESS] Compiled to static binary
-else
-    echo [ERROR] Build failed
-    exit 1
-fi
-sudo cp -p bin/torghost /usr/bin/
+[[ $(id -u) -eq 0 ]] || {
+        echo "You must be root to run this script. Exit"
+        exit 1
+}
+
+echo "Torghost installer v3.0"
+
+echo "Installing prerequisites "
+apt-get update
+apt-get install tor -y
+
+echo "Creating /opt/torghost configuration folder "
+mkdir -p /opt/torghost
+rm -rf /opt/torghost/*
+cp -r conf /opt/torghost
+cp /etc/resolv.conf /opt/torghost/conf/default_resolv.conf
+
+cp -p torghost.sh /usr/bin/torghost
 if [ $? -eq 0 ]; then
     echo [SUCCESS] Copied binary to /usr/bin
 else
     echo [ERROR] Unable to copy
     exit 1
 fi
+
+echo "Installation completed"
+echo "
+
+
+  #####   ####   #####    ####   #    #   ####    #####
+    #    #    #  #    #  #    #  #    #  #    #     #
+    #    #    #  #    #  #       ######  #    #     #
+    #    #    #  #####   #  ###  #    #  #    #     #
+    #    #    #  #   #   #    #  #    #  #    #     #
+    #     ####   #    #   ####   #    #   ####      #
+  
+github.com/marcodebona1994/torghost
+
+
+"
+echo  "Torghost usage:
+    -s, --start       # Start Torghost
+    -r, --switch      # Request new tor exit node
+    -x, --stop        # Stop Torghost
+    -h  --help
+    -b  --backup      # Create backup for restoring networking system
+    -r  --restore     # Restore backup configuration"
