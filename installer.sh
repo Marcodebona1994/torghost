@@ -8,8 +8,8 @@
 echo " [+] Torghost installer v3.0"
 
 echo " [+] [+] Installing prerequisites "
-apt-get update
-apt-get install tor -y
+apt-get update 1>/dev/null 2>&1
+apt-get install tor -y 1>/dev/null 2>&1
 
 echo " [+] [+] Creating /opt/torghost configuration folder "
 mkdir -p /opt/torghost
@@ -28,22 +28,21 @@ fi
 echo " [+] Installation completed"
 echo "
 
-
-  #####   ####   #####    ####   #    #   ####    #####
-    #    #    #  #    #  #    #  #    #  #    #     #
-    #    #    #  #    #  #       ######  #    #     #
-    #    #    #  #####   #  ###  #    #  #    #     #
-    #    #    #  #   #   #    #  #    #  #    #     #
-    #     ####   #    #   ####   #    #   ####      #
+████████╗ ██████╗ ██████╗ ███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗
+╚══██╔══╝██╔═══██╗██╔══██╗██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║
+   ██║   ██║   ██║██████╔╝███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║
+   ██║   ██║   ██║██╔══██╗╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║
+   ██║   ╚██████╔╝██║  ██║███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║
+   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
+                                                                               
   
 github.com/marcodebona1994/torghost
 
 
 "
 echo  "Torghost usage:
-    -s, --start       # Start Torghost
-    -r, --switch      # Request new tor exit node
-    -x, --stop        # Stop Torghost
-    -h  --help
-    -b  --backup      # Create backup for restoring networking system
-    -r  --restore     # Restore backup configuration"
+    -s, --start            # Start Torghost
+    -n, --new-circuit      # Request new tor exit node
+    -x, --stop             # Stop Torghost
+    -b  --backup           # Create backup for restoring networking system
+    -h  --help"   

@@ -9,15 +9,19 @@
 TIME=$(date '+%H:%M:%S')
 
 function usage(){
-        echo "
-  #####   ####   #####    ####   #    #   ####    #####
-    #    #    #  #    #  #    #  #    #  #    #     #
-    #    #    #  #    #  #       ######  #    #     #
-    #    #    #  #####   #  ###  #    #  #    #     #
-    #    #    #  #   #   #    #  #    #  #    #     #
-    #     ####   #    #   ####   #    #   ####      #
+	echo "
+
+████████╗ ██████╗ ██████╗ ███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗
+╚══██╔══╝██╔═══██╗██╔══██╗██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║
+   ██║   ██║   ██║██████╔╝███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║
+   ██║   ██║   ██║██╔══██╗╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║
+   ██║   ╚██████╔╝██║  ██║███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║
+   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
+                                                                               
   
-  github.com/marcodebona1994/torghost
+github.com/marcodebona1994/torghost
+
+
 "
         echo  "Torghost usage:
     -s, --start       	   # Start Torghost
@@ -100,7 +104,7 @@ function backup(){
 function new_circuit(){
         echo " [+] Fetching current tor exit node..."
 	exit_node=$(get_public_ip)
-	echo " [+] [+] TOR EXIT NODE IP:  $exit_node"
+	echo " [+] [+] CURRENT TOR EXIT NODE IP:  $exit_node"
 	echo " [+] Restarting tor network"
 	fuser -k 9051/tcp > /dev/null 2>&1
 	sudo -u debian-tor tor -f /etc/tor/torghostrc > /dev/null
@@ -111,7 +115,7 @@ function new_circuit(){
         	sudo -u debian-tor tor -f /etc/tor/torghostrc > /dev/null
 		new_exit_node=$(get_public_ip)	
 	done
-	echo " [+] [+] TOR EXIT NODE IP:  $new_exit_node"
+	echo " [+] [+] NEW TOR EXIT NODE IP:  $new_exit_node"
 }
  
 case "$1" in
