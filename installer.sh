@@ -1,17 +1,17 @@
 #!/bin/bash
 
 [[ $(id -u) -eq 0 ]] || {
-        echo "You must be root to run this script. Exit"
+        echo " [x] You must be root to run this script. Exit"
         exit 1
 }
 
-echo "Torghost installer v3.0"
+echo " [+] Torghost installer v3.0"
 
-echo "Installing prerequisites "
+echo " [+] [+] Installing prerequisites "
 apt-get update
 apt-get install tor -y
 
-echo "Creating /opt/torghost configuration folder "
+echo " [+] [+] Creating /opt/torghost configuration folder "
 mkdir -p /opt/torghost
 rm -rf /opt/torghost/*
 cp -r conf /opt/torghost
@@ -19,13 +19,13 @@ cp /etc/resolv.conf /opt/torghost/conf/default_resolv.conf
 
 cp -p torghost.sh /usr/bin/torghost
 if [ $? -eq 0 ]; then
-    echo [SUCCESS] Copied binary to /usr/bin
+    echo " [+] [+] [SUCCESS] Copied binary to /usr/bin"
 else
-    echo [ERROR] Unable to copy
+    echo " [x] [ERROR] Unable to copy"
     exit 1
 fi
 
-echo "Installation completed"
+echo " [+] Installation completed"
 echo "
 
 
