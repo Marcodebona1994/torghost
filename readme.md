@@ -27,11 +27,11 @@ sudo torsystem --start
 ### Usage
 ```
 TorSystem usage:
-  -s, --start       	   # Start TorSystem
+  -s, --start       	 # Start TorSystem
   -n, --new-circuit      # Request new tor exit node
   -x, --stop             # Stop TorSystem
-  -b  --backup           # Create backup for restoring networking system
-  -h  --help
+  -b, --backup           # Create backup for restoring networking system
+  -h, --help
 ```
 ## Tested on
  - Kali Linux 2022.2
