@@ -17,18 +17,18 @@ function usage(){
    ██║   ██║   ██║██╔══██╗╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║
    ██║   ╚██████╔╝██║  ██║███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║
    ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
-                                                                               
-  
-github.com/marcodebona1994/torghost
+
+
+github.com/marcodebona1994/torsystem
 
 
 "
-        echo  "Torghost usage:
-    -s, --start       	   # Start Torghost
+        echo  "TorSystem usage:
+    -s, --start       	   # Start TorSystem
     -n, --new-circuit      # Request new tor exit node
-    -x, --stop             # Stop Torghost
+    -x, --stop             # Stop TorSystem
     -b  --backup           # Create backup for restoring networking system
-    -h  --help    
+    -h  --help
 "
 
 }
@@ -50,26 +50,26 @@ function start(){
         echo " [+] Fetching current IP..."
         public_ip=$(get_public_ip)
         echo " [+] [+] Current IP:  $public_ip"
-        echo " [+] Replacing  /opt/torghost/conf/torghostrc -> /etc/tor/torghostrc" 
-        cp -p /opt/torghost/conf/torghostrc /etc/tor/torghostrc
-        echo " [+] Replacing /opt/torghost/conf/resolv.conf -> /etc/resolv.conf " 
-        cp -p /opt/torghost/conf/torghost_resolv.conf /etc/resolv.conf
+        echo " [+] Replacing  /opt/torsystem/conf/torsystemrc -> /etc/tor/torsystemrc"
+        cp -p /opt/torsystem/conf/torsystemrc /etc/tor/torsystemrc
+        echo " [+] Replacing /opt/torsystem/conf/resolv.conf -> /etc/resolv.conf "
+        cp -p /opt/torsystem/conf/torsystem_resolv.conf /etc/resolv.conf
         echo " [+] Stopping tor service"
         fuser -k 9051/tcp > /dev/null 2>&1
         echo " [+] Starting new tor daemon"
-        sudo -u debian-tor tor -f /etc/tor/torghostrc > /dev/null
+        sudo -u debian-tor tor -f /etc/tor/torsystemrc > /dev/null
         echo " [+] Setting up iptables rules"
-        chmod +x /opt/torghost/conf/iptables_setup.sh
-        /opt/torghost/conf/iptables_setup.sh        
-        echo " [+] Torghost is running"
+        chmod +x /opt/torsystem/conf/iptables_setup.sh
+        /opt/torsystem/conf/iptables_setup.sh
+        echo " [+] TorSystem is running"
         echo " [+] Fetching current IP..."
         public_ip=$(get_public_ip)
         echo " [+] [+] TOR EXIT NODE IP:  $public_ip"
-        
+
 }
- 
+
 function stop(){
-        echo " [+] Stopping torghost"
+        echo " [+] Stopping torsystem"
         echo " [+] Flushing iptables, resetting to default"
         iptables -P INPUT ACCEPT
         iptables -P FORWARD ACCEPT
@@ -79,7 +79,7 @@ function stop(){
         iptables -F
         iptables -X
         echo " [+] Restoring default resolv.conf configuration"
-        cp -p /opt/torghost/conf/default_resolv.conf /etc/resolv.conf
+        cp -p /opt/torsystem/conf/default_resolv.conf /etc/resolv.conf
         fuser -k 9051/tcp > /dev/null 2>&1
         echo " [+] Restarting Network manager"
         service networking restart
@@ -91,13 +91,13 @@ function stop(){
 
 function backup(){
         bck_time=$(date "+%F_%R")
-        echo " [+] Creating backup folders on /opt/torghost/backup"
-        mkdir -p /opt/torghost/backup/iptables/
-        mkdir -p /opt/torghost/backup/resolv.conf.d
-        echo " [+] Saving /etc/resolv.conf -> /opt/torghost/backup/resolv.conf.d/resolv.conf.$bck_time.bak"
-        cp -p /etc/resolv.conf /opt/torghost/backup/resolv.conf.d/resolv.conf.$bck_time.bak     
-        echo " [+] Saving iptables rules on /opt/torghost/backup/iptables/iptables_bck_$bck_time.fw"
-        iptables-save | tee /opt/torghost/backup/iptables/iptables_bck_$bck_time.fw > /dev/null
+        echo " [+] Creating backup folders on /opt/torsystem/backup"
+        mkdir -p /opt/torsystem/backup/iptables/
+        mkdir -p /opt/torsystem/backup/resolv.conf.d
+        echo " [+] Saving /etc/resolv.conf -> /opt/torsystem/backup/resolv.conf.d/resolv.conf.$bck_time.bak"
+        cp -p /etc/resolv.conf /opt/torsystem/backup/resolv.conf.d/resolv.conf.$bck_time.bak
+        echo " [+] Saving iptables rules on /opt/torsystem/backup/iptables/iptables_bck_$bck_time.fw"
+        iptables-save | tee /opt/torsystem/backup/iptables/iptables_bck_$bck_time.fw > /dev/null
 
 }
 
@@ -107,17 +107,17 @@ function new_circuit(){
 	echo " [+] [+] CURRENT TOR EXIT NODE IP:  $exit_node"
 	echo " [+] Restarting tor network"
 	fuser -k 9051/tcp > /dev/null 2>&1
-	sudo -u debian-tor tor -f /etc/tor/torghostrc > /dev/null
+	sudo -u debian-tor tor -f /etc/tor/torsystemrc > /dev/null
 	new_exit_node=$(get_public_ip)
 	while [ "$exit_node" = "$new_exit_node" ]
 	do
 		user -k 9051/tcp > /dev/null 2>&1
-        	sudo -u debian-tor tor -f /etc/tor/torghostrc > /dev/null
-		new_exit_node=$(get_public_ip)	
+        	sudo -u debian-tor tor -f /etc/tor/torsystemrc > /dev/null
+		new_exit_node=$(get_public_ip)
 	done
 	echo " [+] [+] NEW TOR EXIT NODE IP:  $new_exit_node"
 }
- 
+
 case "$1" in
         "-h" | "--help")
                 usage
@@ -134,10 +134,7 @@ case "$1" in
         "-x" | "--stop")
                 stop
         ;;
-        *) 
+        *)
                 usage
         ;;
 esac
-
-
-

@@ -1,47 +1,27 @@
-## What is TorGhost ?
-TorGhost is an anonymization script. TorGhost redirects all internet traffic through SOCKS5 tor proxy. DNS requests are also redirected via tor, thus preventing DNSLeak. The scripts also disables unsafe packets exiting the system. Some packets like ping request can compromise your identity.
+## What is TorSystem ?
+TorSystem is an anonymization script. TorSystem redirects all internet traffic through SOCKS5 tor proxy. DNS requests are also redirected via tor, thus preventing DNSLeak. The scripts also disables unsafe packets exiting the system. Some packets like ping request can compromise your identity.
 
-## Original source
+## Credits
+Bash rewrite of Torghost -> https://github.com/SusmithKrishnan/torghost.git
+
+## Installation
 ```
-git clone https://github.com/SusmithKrishnan/torghost.git
-```
-## Updated repository
-```
-git clone https://github.com/marcodebona1994/torghost.git
-```
-## Build
-```
-cd torghost
-chmod +x installer.sh
-./installer.sh
+git clone https://github.com/Marcodebona1994/torsystem.git
+cd torsystem
+./install
 ```
 
 ## Run
 ```
-sudo torghost --start
-```
-or
-```
-sudo python3 torghost.py --start
-```
-Torghost v4.0 usage:
+sudo torsystem --start
 
-`  -s, --start        # Start`
-
-`  -r, --switch       # Request new tor exit node`
-
-`  -x, --stop         # Stop`
-
-`  -h, --help         # Print this help and exit`
-
-## Warning
-The script will delete and restore the current iptables rules. If you want to be 100% secure, manually save your iptables
-
-Save iptables
 ```
-iptables-save > path_to_back/iptables_bck.fw
-```
-Restore iptables
-```
-iptables-restore < path_to_back/iptables_bck.fw
-```
+
+### Usage
+
+TorSystem usage:
+-s, --start       	   # Start TorSystem
+-n, --new-circuit      # Request new tor exit node
+-x, --stop             # Stop TorSystem
+-b  --backup           # Create backup for restoring networking system
+-h  --help
