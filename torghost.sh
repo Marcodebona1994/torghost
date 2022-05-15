@@ -58,7 +58,7 @@ function start(){
         sudo -u debian-tor tor -f /etc/tor/torghostrc > /dev/null
         echo "setting up iptables rules"
         chmod +x /opt/torghost/conf/iptables_setup.sh
-        bash -x /opt/torghost/conf/iptables_setup.sh
+        /opt/torghost/conf/iptables_setup.sh
         
         echo "Torghost is running"
         echo " Fetching current IP..."
